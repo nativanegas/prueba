@@ -3,12 +3,13 @@ output_dir: "."
 navbar:
   title: "Coronavirus en Colombia año 2020"
   left:
+    - text: "Tablero"
+      href: tablero.html
     - text: "Home"
       href: index.html
     - text: "About"
       href: about.html
-    - text: "Tablero"
-      href: tablero.html
+    
 output:
   html_document:
     theme: united
