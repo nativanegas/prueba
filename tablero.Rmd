@@ -1,0 +1,61 @@
+---
+title: "Covid-19 Colombia"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+```{r setup, include=FALSE}
+library(sf)
+library(ggplot2)
+library(tmap)
+library(tmaptools)
+library(leaflet)
+library(dplyr)
+library(rgdal)
+library(sp)
+library(readxl)
+library(RSocrata)
+library(mapview)
+
+
+
+
+token <- "ew2rEMuESuzWPqMkyPfOSGJgE"
+df.ins <- read.socrata("https://www.datos.gov.co/resource/gt2j-8ykr.json", app_token = token)
+mapa=readOGR("/Users/Natalia/Desktop/TESIS/depto/depto.shp",stringsAsFactors=FALSE)
+dashboard=st_read("/Users/Natalia/Desktop/TESIS/depto/depto.shp",stringsAsFactors=FALSE)
+
+```
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Reporte a la fecha
+```{r}
+df.ins$codigo=NA
+df.ins$codigo=trunc(as.numeric(df.ins$c_digo_divipola)/1000)
+tabla=table(df.ins$codigo,df.ins$atenci_n)
+
+dashboard=arrange(dashboard, as.numeric(DPTO))
+rownames(tabla)=dashboard$NOMBRE_DPT
+tabla[,1]=tabla[,1]+tabla[,3]+tabla[,4]
+tabla=tabla[,-c(3:5)]
+TOTAL_CONTAGIADOS=tabla[,1]+tabla[,2]+tabla[,3]
+
+write.csv(tabla, file="covid19.csv")
+covid19=read.csv("/Users/Natalia/Desktop/TESIS/DASHBOARD/covid19.csv")
+covid19=data.frame(covid19,TOTAL_CONTAGIADOS)
+names(covid19)=cbind("NOMBRE_DPT","CASOS ACTIVOS","FALLECIDOS","RECUPERADOS","TOTAL CONTAGIADOS")
+dashboard=dashboard[,-1]
+tabla
+mapa_datos=inner_join(dashboard,covid19)#Une las bases dashboard y covid 19.
+mapa_datos=mapa_datos[,-c(2:4)] #Elimina las columnas 2 a 4 de la base creada anteriormente.
+
+```
+
+Column {data-width=450} 
+-----------------------------------------------------------------------
+```{r}
+mapview(mapa_datos)
+
+```
