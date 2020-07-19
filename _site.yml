@@ -1,12 +1,14 @@
 name: "COVID 19"
 output_dir: "."
 navbar:
-  title: "Coronavirus en Colombia"
+  title: "Coronavirus en Colombia año 2020"
   left:
     - text: "Home"
       href: index.html
     - text: "About"
       href: about.html
+    - text: "Tablero"
+      href: tablero.html
 output:
   html_document:
     theme: united

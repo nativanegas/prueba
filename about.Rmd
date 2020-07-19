@@ -1,5 +1,4 @@
 ---
-title: "About This Website"
+title: "Gráficas"
 ---
 
-More about this website.
