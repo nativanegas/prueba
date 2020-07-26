@@ -8,6 +8,9 @@ navbar:
       href: index.html
     - text: "about"
       href: about.html
+    - text: "Tablero"
+      href: tablero.html
+      
     
 output:
   html_document:
