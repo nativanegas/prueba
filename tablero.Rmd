@@ -1,5 +1,5 @@
 ---
-title: "Covid-19 Colombia año 2020"
+title: "Covid-19 Colombia"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
