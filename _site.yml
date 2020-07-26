@@ -6,8 +6,8 @@ navbar:
    
     - text: "Home"
       href: index.html
-    - text: "Gráficas"
-      href: about.html
+    - text: "Graficas"
+      href: Graficas.html
     
 output:
   html_document:
