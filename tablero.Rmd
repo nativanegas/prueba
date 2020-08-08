@@ -19,8 +19,6 @@ library(RSocrata)
 library(mapview)
 
 
-
-
 token <- "ew2rEMuESuzWPqMkyPfOSGJgE"
 df.ins <- read.socrata("https://www.datos.gov.co/resource/gt2j-8ykr.json", app_token = token)
 mapa=readOGR("/Users/Natalia/Desktop/TESIS/depto/depto.shp",stringsAsFactors=FALSE)
@@ -47,6 +45,8 @@ mapa_datos=mapa_datos[,-c(2:4)] #Elimina las columnas 2 a 4 de la base creada an
 Column {data-width=650} 
 
 ```{r}
+###Reporte a la fecha
+
 tabla
 ```
 Column {data-width=450} 
