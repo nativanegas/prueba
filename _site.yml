@@ -10,6 +10,8 @@ navbar:
       href: about.html
     - text: "Tablero"
       href: tablero.html
+    - text: "Serie de Tiempo"
+      href: serietiempo.html
       
     
 output:
