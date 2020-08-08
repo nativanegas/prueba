@@ -41,14 +41,15 @@ inc.casos.colombia.confirmados <- incidence(df.ins$fecha_fecha_reporte_web,
                                      groups = df.ins$confirmados)
 serie.colombia <- xts(x = inc.casos.colombia.confirmados$counts,
                       order.by = inc.casos.colombia.confirmados$dates)
+plot1_time <- dygraph(serie.colombia) %>% 
+  dyRangeSelector(dateWindow = c("2020-03-03", "2020-08-08")) 
 
 ```
 
 Column {data-width=450} 
 -----------------------------------------------------------------------
 ```{r}
-plot1_time <- dygraph(serie.colombia) %>% 
-  dyRangeSelector(dateWindow = c("2020-03-03", "2020-08-08"))  
+ 
 
 plot1_time
 
