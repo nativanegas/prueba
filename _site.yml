@@ -4,7 +4,7 @@ navbar:
   title: "Coronavirus en Colombia año 2020"
   left:
    
-    - text: "Inicio"
+    - text: "Presentación"
       href: index.html
     - text: "about"
       href: about.html
