@@ -1,0 +1,21 @@
+name: "COVID 19"
+output_dir: "."
+navbar:
+  title: "Coronavirus en Colombia año 2020"
+  left:
+   
+    - text: "Inicio"
+      href: index.html
+    - text: "about"
+      href: about.html
+    - text: "Tablero"
+      href: tablero.html
+    - text: "Serie de Tiempo"
+      href: serietiempo.html
+      
+    
+output:
+  html_document:
+    theme: united
+    highlight: textmate
+      
