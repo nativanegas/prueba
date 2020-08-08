@@ -25,13 +25,6 @@ token <- "ew2rEMuESuzWPqMkyPfOSGJgE"
 df.ins <- read.socrata("https://www.datos.gov.co/resource/gt2j-8ykr.json", app_token = token)
 mapa=readOGR("/Users/Natalia/Desktop/TESIS/depto/depto.shp",stringsAsFactors=FALSE)
 dashboard=st_read("/Users/Natalia/Desktop/TESIS/depto/depto.shp",stringsAsFactors=FALSE)
-
-```
-Column {data-width=600}
------------------------------------------------------------------------
-
-### Reporte a la fecha
-```{r}
 df.ins$codigo=NA
 df.ins$codigo=trunc(as.numeric(df.ins$c_digo_divipola)/1000)
 tabla=table(df.ins$codigo,df.ins$atenci_n)
@@ -50,9 +43,12 @@ dashboard=dashboard[,-1]
 tabla
 mapa_datos=inner_join(dashboard,covid19)#Une las bases dashboard y covid 19.
 mapa_datos=mapa_datos[,-c(2:4)] #Elimina las columnas 2 a 4 de la base creada anteriormente.
-
 ```
+Column {data-width=450} 
 
+```{r}
+tabla
+```
 Column {data-width=450} 
 -----------------------------------------------------------------------
 ```{r}
