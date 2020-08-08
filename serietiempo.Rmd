@@ -49,7 +49,6 @@ plot1_time <- dygraph(serie.colombia) %>%
 Column {data-width=450} 
 -----------------------------------------------------------------------
 ```{r}
- 
 
 plot1_time
 
