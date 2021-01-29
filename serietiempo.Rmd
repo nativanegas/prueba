@@ -6,7 +6,9 @@ output:
     social: menu
     source_code: embed
 ---
-```{r setup, include=FALSE}
+```{r setup, include=FALSE,echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
 library(tidyverse)
 library(RSocrata)
 library(dygraphs)
@@ -15,40 +17,55 @@ library(incidence)
 library(aTSA)
 library(lmtest)
 library(forecast)
-token <- "ew2rEMuESuzWPqMkyPfOSGJgE"
-df.ins <- read.socrata("https://www.datos.gov.co/resource/gt2j-8ykr.json", app_token = token)
-df.ins$fis <- as.Date(df.ins$fis, format = "%Y-%m-%d")
-df.ins$fecha_de_notificaci_n <- as.Date(df.ins$fecha_de_notificaci_n, format = "%Y-%m-%d")
-df.ins$fecha_de_muerte <- as.Date(df.ins$fecha_de_muerte, format = "%Y-%m-%d")
-df.ins$fecha_recuperado <- as.Date(df.ins$fecha_recuperado, format = "%Y-%m-%d")
-df.ins$fecha_fecha_reporte_web <- as.Date(df.ins$fecha_reporte_web, format = "%Y-%m-%d")
-df.ins$fecha_fecha_diagnostico  <- as.Date(df.ins$fecha_diagnostico, format = "%Y-%m-%d")
-
-df.ins$confirmados <- "Confirmados"
-df.ins <- df.ins %>%
-  dplyr::select(id_de_caso,
-                ciudad_de_ubicaci_n,
-                confirmados,
-                fecha_de_notificaci_n,
-                fis,
-                fecha_fecha_diagnostico,
-                fecha_de_muerte,
-                fecha_fecha_reporte_web,
-                everything())
-
-########################CONFIRMADOS#####################
-inc.casos.colombia.confirmados <- incidence(df.ins$fecha_fecha_reporte_web,
-                                     groups = df.ins$confirmados)
-serie.colombia <- xts(x = inc.casos.colombia.confirmados$counts,
-                      order.by = inc.casos.colombia.confirmados$dates)
-plot1_time <- dygraph(serie.colombia) 
-
+library(dplyr)
+library(seastests)
+library(trend)
+library(xtable)
+library(graphics)
+library(textreadr)
+library(sf) #Contiene funciones para codificar datos espaciales.
+library(ggplot2) #Sirve para crear graficos y mapear
+library(tmap) #Importa mapas tematicos en los cuales se visualizan las distribuciones de datos espaciales.
+library(tmaptools) #Conjunto de herramientas para leer y procesar datos espaciales.
+library(leaflet) #Crea y personaliza mapas interactivos usando una biblioteca de JavaScript
+library(rgdal) #Proporciona enlaces a la Biblioteca de abstraccion de datos 'geoespaciales' y acceso
+#a las operaciones de proyeccion. 
+library(sp) #Clases y metodos para datos espaciales.
+library(readxl) #Importa archivos de excel a R.
+library(mapview)
 ```
 
-Column {data-width=450} 
------------------------------------------------------------------------
-```{r}
+```{r descarga_datos, echo=FALSE, message=FALSE}
+df.ins=read.csv("/Users/Carlos/Desktop/Ratoncita/Tesis Natalia/PRESENTACION TESIS/21dic.csv")
+df.ins$fecha_inicio_sintomas <- as.Date(df.ins$fecha_inicio_sintomas,tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
+df.ins$fecha_de_notificaci_n <- as.Date(df.ins$fecha_de_notificaci_n, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
+df.ins$fecha_muerte <- as.Date(df.ins$fecha_muerte, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
+df.ins$fecha_recuperado <- as.Date(df.ins$fecha_recuperado, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
+df.ins$fecha_reporte_web <- as.Date(df.ins$fecha_reporte_web, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
+df.ins$fecha_diagnostico  <- as.Date(df.ins$fecha_diagnostico, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
+#De la 11 a la 16 convierte en formato fecha corta.
 
-plot1_time
+df.ins$confirmados <- "Confirmados" #Crea una columna para tener un conteo de los confirmados diarios.
 
+df.ins <- df.ins %>%
+  dplyr::select(id_de_caso,
+                ciudad_municipio_nom,
+                fecha_inicio_sintomas,
+                confirmados,
+                fecha_de_notificaci_n,
+                fecha_diagnostico,
+                fecha_muerte,
+                fecha_reporte_web,
+                everything()) #Reorganiza la base.
+inc.casos.colombia.confirmados <- incidence(df.ins$fecha_reporte_web,
+  groups = df.ins$confirmados) #Hace un conteo de cantidad de 
+#confirmados por fecha.
+serie.colombia <- xts(x = inc.casos.colombia.confirmados$counts,
+                      order.by = inc.casos.colombia.confirmados$dates) #Crea una serie de tiempo con la 
+#cantidad de confirmados.
+ts_colombia<- ts(serie.colombia) #Convierte en una serie de tiempo tipo ts la serie anterior.
+```
+
+```{r serie_tiempo}
+plot(ts_colombia)
 ```
