@@ -32,31 +32,9 @@ library(sp) #Clases y metodos para datos espaciales.
 library(readxl) #Importa archivos de excel a R.
 library(mapview)
 
-df.ins=read.csv("/Users/Carlos/Desktop/Ratoncita/Tesis Natalia/PRESENTACION TESIS/21dic.csv")
-df.ins$fecha_inicio_sintomas <- as.Date(df.ins$fecha_inicio_sintomas,tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
-df.ins$fecha_de_notificaci_n <- as.Date(df.ins$fecha_de_notificaci_n, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
-df.ins$fecha_muerte <- as.Date(df.ins$fecha_muerte, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
-df.ins$fecha_recuperado <- as.Date(df.ins$fecha_recuperado, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
-df.ins$fecha_reporte_web <- as.Date(df.ins$fecha_reporte_web, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
-df.ins$fecha_diagnostico  <- as.Date(df.ins$fecha_diagnostico, tryFormats = c("%d-%m-%Y", "%d/%m/%Y"))
-#De la 11 a la 16 convierte en formato fecha corta.
-
-df.ins$confirmados <- "Confirmados" #Crea una columna para tener un conteo de los confirmados diarios.
-
-df.ins <- df.ins %>%
-  dplyr::select(id_de_caso,
-                ciudad_municipio_nom,
-                fecha_inicio_sintomas,
-                confirmados,
-                fecha_de_notificaci_n,
-                fecha_diagnostico,
-                fecha_muerte,
-                fecha_reporte_web,
-                everything()) #Reorganiza la base.
-inc.casos.colombia.confirmados <- incidence(df.ins$fecha_reporte_web,
-  groups = df.ins$confirmados) #Hace un conteo de cantidad de 
-mapa=readOGR("/Users/Carlos/Desktop/Ratoncita/Departamentos/depto.shp", stringsAsFactors=FALSE) #Exporta los datos para crear el mapa de Colombia dividido por departamentos
-dashboard=st_read("/Users/Carlos/Desktop/Ratoncita/Departamentos/depto.shp",stringsAsFactors=FALSE) #Exporta las caracteristicas de cada departamento de Colombia
+df.ins=read.csv("/Users/Natalia/Desktop/TESIS/2020-2/DOCUMENTOS FINAL TESIS/21dic.csv")
+mapa=readOGR("/Users/Natalia/Desktop/TESIS/depto/depto.shp", stringsAsFactors=FALSE) #Exporta los datos para crear el mapa de Colombia dividido por departamentos
+dashboard=st_read("/Users/Natalia/Desktop/TESIS/depto/depto.shp",stringsAsFactors=FALSE) #Exporta las caracteristicas de cada departamento de Colombia
 plot(mapa,main="COLOMBIA") #Crea el mapa de Colombia
 str(mapa) #Muestra de forma compacta la estructura interna de un objeto.
 
@@ -72,8 +50,8 @@ TOTAL=as.data.frame(TOTAL)
 dashboard=arrange(dashboard, as.numeric(DPTO)) #Organiza de menor a mayor la base dashboard dependiendo del cod. de dpto.
 rownames(TOTAL)=dashboard$NOMBRE_DPT
 rownames(tabla1)=dashboard$NOMBRE_DPT
-write.csv(tabla1, file="covid19.csv") #Guarda en un archivo .csv la tabla creada.
-covid19=read.csv("/Users/Carlos/Desktop/Ratoncita/Tesis Natalia/PRESENTACION TESIS/covid19.csv") #Exporta el archivo creado anteriormente.
+#write.csv(tabla1, file="covid19.csv") #Guarda en un archivo .csv la tabla creada.
+covid19=read.csv("/Users/Natalia/Desktop/TESIS/2020-2/DOCUMENTOS FINAL TESIS/covid19.csv") #Exporta el archivo creado anteriormente.
 covid19=data.frame(covid19,TOTAL) #Concatena el archivo anterior con el total de contagiados.
 names(covid19)=cbind("NOMBRE_DPT","CASOS ACTIVOS","FALLECIDOS","SIN REGISTROS","RECUPERADOS","TOTAL CONTAGIADOS") #Renombra las columnas.
 dashboard=dashboard[,-1] #Elimina la primera columna de la base dashboard.
@@ -87,14 +65,14 @@ tm_shape(mapa_datos)+
 
 test_map=tmap_last() #Guarda el mapa.
 tmap_save(test_map,"mapa.html",add.titles = TRUE) #Crea el archivo HTML del mapa dinamico.
-
 ```
+</center>
 
-```
+
 
 Column {data-width=450} 
 -----------------------------------------------------------------------
-```{r}
+```{r,echo=FALSE}
 mapview(mapa_datos)
 
 ```
